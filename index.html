@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111411">
+<title>Fit | Weekly Training Planner</title>
+<style>
+:root{color-scheme:dark;--bg:#111411;--panel:#191e19;--panel2:#202720;--text:#eef1e9;--muted:#a2ada0;--line:#303a30;--accent:#c7f36b;--accent-dark:#27341a;--rest:#7c9b77}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#293629 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}.wrap{max-width:1080px;margin:auto;padding:32px 22px 64px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:48px}.brand{font-size:13px;font-weight:850;letter-spacing:.2em}.brand span{color:var(--accent)}.badge{border:1px solid var(--line);border-radius:99px;padding:7px 12px;color:var(--muted);font-size:12px}
+.hero{display:grid;grid-template-columns:1.4fr .6fr;gap:24px;align-items:end;margin-bottom:34px}.kicker,.eyebrow{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.hero h1{font-size:clamp(38px,7vw,70px);line-height:.98;letter-spacing:-.055em;margin:12px 0 18px;max-width:650px}.hero p{max-width:570px;color:var(--muted);margin:0}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:18px;background:var(--panel);border:1px solid var(--line);border-radius:16px}.stat strong{display:block;font-size:28px;letter-spacing:-.04em}.stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.section-title{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:38px 0 15px}.section-title h2{font-size:21px;margin:0;letter-spacing:-.03em}.section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.week-item{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;min-height:105px;padding:13px 11px;background:var(--panel);border:1px solid var(--line);border-radius:13px;color:var(--text);cursor:pointer}.week-item span{font-size:11px;color:var(--muted)}.week-item b{font-size:14px}.week-item small{font-size:11px;color:var(--muted)}.week-item:hover,.week-item:focus-visible{border-color:var(--accent);outline:none}.week-item.rest{background:transparent;opacity:.75}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:28px 0 14px}.total-progress{font-size:13px;color:var(--muted)}.total-progress strong{color:var(--text)}.plain-button{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;padding:8px 12px;cursor:pointer}.plain-button:hover{border-color:var(--accent)}
+.workouts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.day-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;scroll-margin-top:18px}.day-heading{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.day-heading h2{font-size:23px;letter-spacing:-.04em;margin:5px 0}.day-heading p{font-size:12px;color:var(--muted);margin:0}.day-count{white-space:nowrap;font-size:12px;color:var(--muted);border:1px solid var(--line);padding:5px 9px;border-radius:99px}.day-count b{color:var(--accent)}.progress-track{height:4px;background:#303830;border-radius:99px;margin:17px 0 9px;overflow:hidden}.progress-track span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.exercise-list{display:flex;flex-direction:column}.exercise{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}.exercise:last-child{border-bottom:0}.exercise input{position:absolute;opacity:0;width:1px;height:1px}.checkmark{width:19px;height:19px;flex:0 0 19px;border:1px solid #596456;border-radius:6px;margin-top:2px;display:grid;place-items:center}.exercise input:checked+.checkmark{background:var(--accent);border-color:var(--accent)}.exercise input:checked+.checkmark:after{content:"✓";color:#172010;font-size:13px;font-weight:900}.exercise input:focus-visible+.checkmark{outline:2px solid var(--accent);outline-offset:3px}.exercise-body{display:flex;flex-direction:column;gap:3px}.exercise-body strong{font-size:14px;font-weight:700}.prescription{font-size:12px;color:var(--accent)}.prescription i{font-style:normal;color:var(--muted)}.exercise-body small{font-size:12px;color:var(--muted)}.exercise:has(input:checked) .exercise-body strong{text-decoration:line-through;color:#849080}.reset-day{margin-top:12px;border:0;background:transparent;padding:5px 0;color:var(--muted);font-size:12px;cursor:pointer}.reset-day:hover{color:var(--accent)}
+.note{margin-top:22px;background:var(--accent-dark);border:1px solid #465b30;padding:17px 19px;border-radius:14px;color:#e5f1d7}.note strong{display:block;margin-bottom:4px}.note p{font-size:13px;margin:0;color:#c2d1b7}.routine{margin-top:35px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}.routine-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px}.routine-item{padding:13px 0;border-bottom:1px solid var(--line)}.routine-item b{display:block;font-size:13px}.routine-item span{font-size:12px;color:var(--muted)}footer{margin-top:30px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.stats{max-width:360px}.week-grid{grid-template-columns:repeat(4,1fr)}.workouts{grid-template-columns:1fr}.wrap{padding:22px 15px 45px}.topbar{margin-bottom:35px}.week-item{min-height:90px}}
+@media(max-width:390px){.week-grid{grid-template-columns:repeat(2,1fr)}.routine-grid{grid-template-columns:1fr}.day-card{padding:16px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar"><div class="brand">FIT<span> / </span>TRAINING LOG</div><div class="badge">WEEKLY PLAN · 5 SESSIONS</div></div>
+  <header class="hero">
+    <div><div class="kicker">Consistency over perfection</div><h1>Build strength.<br>Track the work.</h1><p>Your five-day home hypertrophy plan, organized into a weekly schedule with clickable exercise checklists and progress tracking.</p></div>
+    <div class="stats"><div class="stat"><strong>05</strong><span>Workout days</span></div><div class="stat"><strong>02</strong><span>Rest days</span></div><div class="stat"><strong>30–40</strong><span>Target minutes</span></div><div class="stat"><strong id="overall-percent">0%</strong><span>Session progress</span></div></div>
+  </header>
+  <section class="routine">
+    <div class="section-title" style="margin-top:0"><div><h2>Daily rhythm</h2><p>Based on the schedule in your plan.</p></div></div>
+    <div class="routine-grid">
+      <div class="routine-item"><b>06:00 AM · Wake & morning walk</b><span>Gentle movement and fresh air.</span></div>
+      <div class="routine-item"><b>07:45 AM · School</b><span>Classes and necessary breaks.</span></div>
+      <div class="routine-item"><b>Until 3:15 PM · Decompress</b><span>Snack, water and rest after school.</span></div>
+      <div class="routine-item"><b>3:15 PM · Workout</b><span>Target a 30–40 minute session.</span></div>
+      <div class="routine-item"><b>Following 1.5 hours · Extras</b><span>Projects, coding, skills or hobbies.</span></div>
+      <div class="routine-item"><b>Next 1.5 hours · Study</b><span>Homework and focused academic work.</span></div>
+      <div class="routine-item"><b>Evening · Free time</b><span>Play, recreation and relaxation.</span></div>
+      <div class="routine-item"><b>9:45 PM · Sleep</b><span>Keep a consistent sleep routine.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><div><h2>Your week</h2><p>Select a workout day to jump to its checklist.</p></div></div>
+    <div class="week-grid"><button class="week-item" data-target="day-1" type="button"><span>Monday</span><b>Day 1</b><small>Chest &amp; Triceps</small></button>
+<button class="week-item" data-target="day-2" type="button"><span>Tuesday</span><b>Day 2</b><small>Back &amp; Biceps</small></button>
+<div class="week-item rest"><span>Wednesday</span><b>Rest / recovery</b></div>
+<button class="week-item" data-target="day-3" type="button"><span>Thursday</span><b>Day 3</b><small>Lower Body</small></button>
+<button class="week-item" data-target="day-4" type="button"><span>Friday</span><b>Day 4</b><small>Shoulders &amp; Core</small></button>
+<button class="week-item" data-target="day-5" type="button"><span>Saturday</span><b>Day 5</b><small>Arms &amp; Upper Body</small></button>
+<div class="week-item rest"><span>Sunday</span><b>Rest / recovery</b></div></div>
+  </section>
+  <div class="toolbar"><div class="total-progress"><strong id="overall-done">0</strong> of <strong id="overall-total">0</strong> exercises checked</div><button class="plain-button" id="reset-all" type="button">Reset week</button></div>
+  <section class="workouts">
+      <section class="day-card" id="day-1" data-day="1">
+        <div class="day-heading">
+          <div><span class="eyebrow">WORKOUT 1</span><h2>Chest &amp; Triceps</h2><p>Push focus · chest stretch, time under tension, triceps</p></div>
+          <span class="day-count"><b class="done-count">0</b>/5</span>
+        </div>
+        <div class="progress-track"><span></span></div>
+        <div class="exercise-list">
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Deficit Push-Ups</strong>
+            <span class="prescription">3–4 sets <i>·</i> Controlled reps; stop when form breaks</span>
+            <small>Hands on stable, non-slip supports; use a comfortable range.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dumbbell / Backpack Bench Press</strong>
+            <span class="prescription">3–4 sets <i>·</i> 8–12 reps · 4 sec down, 1 sec pause</span>
+            <small>Keep wrists stacked and the load controlled.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Incline Dumbbell Flyes</strong>
+            <span class="prescription">3 sets <i>·</i> 10–12 reps · squeeze at the top</span>
+            <small>Use light weight and avoid forcing a deep shoulder stretch.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Overhead Dumbbell / Backpack Triceps Extension</strong>
+            <span class="prescription">3–4 sets <i>·</i> 10–15 reps</span>
+            <small>Keep elbows comfortable and torso steady.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Floor Triceps Extensions (Skullcrushers)</strong>
+            <span class="prescription">3 sets <i>·</i> 12–15 reps</span>
+            <small>Move slowly; keep the load secure.</small>
+          </span>
+        </label></div>
+        <button class="reset-day" type="button">Reset this workout</button>
+      </section>
+
+      <section class="day-card" id="day-2" data-day="2">
+        <div class="day-heading">
+          <div><span class="eyebrow">WORKOUT 2</span><h2>Back &amp; Biceps</h2><p>Pull focus · mid-back, posture, biceps</p></div>
+          <span class="day-count"><b class="done-count">0</b>/6</span>
+        </div>
+        <div class="progress-track"><span></span></div>
+        <div class="exercise-list">
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dead Hangs</strong>
+            <span class="prescription">2–3 sets <i>·</i> Comfortable hold</span>
+            <small>Use a secure bar and stop if you feel shoulder or hand pain.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dumbbell / Backpack Bent-Over Rows</strong>
+            <span class="prescription">3–4 sets <i>·</i> 8–12 reps · 1 sec squeeze</span>
+            <small>Hinge at hips and keep your back neutral.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Single-Arm Dumbbell Rows</strong>
+            <span class="prescription">3 sets <i>·</i> 10–12 reps per arm</span>
+            <small>Support yourself on a stable bench.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Reverse Snow Angels</strong>
+            <span class="prescription">3 sets <i>·</i> 15–20 slow reps</span>
+            <small>Keep the movement controlled and pain-free.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dumbbell Biceps Curls</strong>
+            <span class="prescription">3–4 sets <i>·</i> 10–12 reps</span>
+            <small>Avoid swinging your torso.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Water Bottle / Light Dumbbell Curl Finisher</strong>
+            <span class="prescription">1 set <i>·</i> Stop when form starts to break</span>
+            <small>A finisher is optional; no need to force absolute failure.</small>
+          </span>
+        </label></div>
+        <button class="reset-day" type="button">Reset this workout</button>
+      </section>
+
+      <section class="day-card" id="day-3" data-day="3">
+        <div class="day-heading">
+          <div><span class="eyebrow">WORKOUT 3</span><h2>Lower Body</h2><p>Legs &amp; glutes · unilateral work, controlled tempo</p></div>
+          <span class="day-count"><b class="done-count">0</b>/5</span>
+        </div>
+        <div class="progress-track"><span></span></div>
+        <div class="exercise-list">
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Bulgarian Split Squats</strong>
+            <span class="prescription">3–4 sets per leg <i>·</i> 8–12 reps</span>
+            <small>Use a stable support; bodyweight is enough to start.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dumbbell Romanian Deadlifts (RDLs)</strong>
+            <span class="prescription">3–4 sets <i>·</i> 10–12 reps</span>
+            <small>Push hips back and keep the load close.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Slow-Tempo Goblet Squats</strong>
+            <span class="prescription">3 sets <i>·</i> 12–15 reps · 4 sec down, 2 sec pause</span>
+            <small>Use a depth you can control without pain.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dumbbell / Bodyweight Calf Raises</strong>
+            <span class="prescription">3 sets <i>·</i> 15–20 reps</span>
+            <small>Use support for balance if needed.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Wall Sit</strong>
+            <span class="prescription">2 sets <i>·</i> Stop before pain or form breakdown</span>
+            <small>Breathe normally; maximal holds are not required.</small>
+          </span>
+        </label></div>
+        <button class="reset-day" type="button">Reset this workout</button>
+      </section>
+
+      <section class="day-card" id="day-4" data-day="4">
+        <div class="day-heading">
+          <div><span class="eyebrow">WORKOUT 4</span><h2>Shoulders &amp; Core</h2><p>Shoulders, trunk control, abs and obliques</p></div>
+          <span class="day-count"><b class="done-count">0</b>/6</span>
+        </div>
+        <div class="progress-track"><span></span></div>
+        <div class="exercise-list">
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Pike Push-Ups</strong>
+            <span class="prescription">3–4 sets <i>·</i> Leave a little in reserve</span>
+            <small>Start with an easier angle; avoid painful shoulder positions.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Lateral Raises</strong>
+            <span class="prescription">4 sets <i>·</i> 15–25 reps · brief pause at top</span>
+            <small>Use light dumbbells or water bottles and avoid swinging.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Seated Dumbbell Overhead Press</strong>
+            <span class="prescription">3 sets <i>·</i> 8–12 reps</span>
+            <small>Use a stable seat and a comfortable range.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Hollow Body Holds</strong>
+            <span class="prescription">3 sets <i>·</i> Controlled hold</span>
+            <small>Keep the lower back gently pressed into the floor; shorten the hold if needed.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Reverse Crunches with Pelvic Tilt</strong>
+            <span class="prescription">3–4 sets <i>·</i> 12–15 reps</span>
+            <small>Curl the pelvis slowly without swinging.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Plank Holds</strong>
+            <span class="prescription">2–3 sets <i>·</i> Controlled hold</span>
+            <small>Stop when you can no longer maintain a straight, stable position.</small>
+          </span>
+        </label></div>
+        <button class="reset-day" type="button">Reset this workout</button>
+      </section>
+
+      <section class="day-card" id="day-5" data-day="5">
+        <div class="day-heading">
+          <div><span class="eyebrow">WORKOUT 5</span><h2>Arms &amp; Upper Body</h2><p>Arm work plus chest volume</p></div>
+          <span class="day-count"><b class="done-count">0</b>/5</span>
+        </div>
+        <div class="progress-track"><span></span></div>
+        <div class="exercise-list">
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Incline Dumbbell Biceps Curls</strong>
+            <span class="prescription">3–4 sets <i>·</i> 10–12 reps</span>
+            <small>Use a comfortable stretch and avoid swinging.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dumbbell Kickbacks / Bench Dip</strong>
+            <span class="prescription">3–4 sets <i>·</i> 12–15 reps</span>
+            <small>Choose kickbacks if dips irritate your shoulders.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Dumbbell Hammer Curls</strong>
+            <span class="prescription">3 sets <i>·</i> 10–12 reps</span>
+            <small>Keep elbows near your sides.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Slow-Tempo Push-Ups</strong>
+            <span class="prescription">3 sets <i>·</i> Controlled reps · 4 sec down, 1 sec pause, 2 sec up</span>
+            <small>Stop when your form starts to break.</small>
+          </span>
+        </label>
+        <label class="exercise">
+          <input type="checkbox" class="done">
+          <span class="checkmark" aria-hidden="true"></span>
+          <span class="exercise-body">
+            <strong>Backpack / Dumbbell Press-Out Squeeze</strong>
+            <span class="prescription">3 sets <i>·</i> 12–15 reps · 1 sec squeeze</span>
+            <small>Keep the load secure and shoulders comfortable.</small>
+          </span>
+        </label></div>
+        <button class="reset-day" type="button">Reset this workout</button>
+      </section></section>
+  <aside class="note"><strong>Train with control, not ego.</strong><p>Warm up first, use stable equipment, and stop if you feel sharp pain, dizziness, or unusual discomfort. Leave a little in reserve rather than forcing every set to absolute failure. Increase load or reps gradually while keeping good form.</p></aside>
+  <footer><span>FIT · PERSONAL TRAINING PLANNER</span><span>Checklist progress saves in this browser on this device.</span></footer>
+</main>
+<script>
+const STORAGE_KEY = "fit-workout-checks-v1";
+function loadChecks(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){return {}}}
+let checks=loadChecks();
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(checks))}catch(e){}}
+function update(){
+  let total=0,done=0;
+  document.querySelectorAll(".day-card").forEach(card=>{
+    const boxes=[...card.querySelectorAll(".done")];
+    const completed=boxes.filter(b=>b.checked).length;
+    total+=boxes.length;done+=completed;
+    card.querySelector(".done-count").textContent=completed;
+    card.querySelector(".progress-track span").style.width=(completed/boxes.length*100)+"%";
+  });
+  document.getElementById("overall-done").textContent=done;
+  document.getElementById("overall-total").textContent=total;
+  document.getElementById("overall-percent").textContent=Math.round(done/total*100)+"%";
+}
+document.querySelectorAll(".day-card").forEach(card=>{
+  const id=card.dataset.day;
+  card.querySelectorAll(".done").forEach((box,i)=>{
+    box.checked=Boolean(checks[id+"-"+i]);
+    box.addEventListener("change",()=>{checks[id+"-"+i]=box.checked;save();update()});
+  });
+  card.querySelector(".reset-day").addEventListener("click",()=>{
+    card.querySelectorAll(".done").forEach((box,i)=>{box.checked=false;delete checks[id+"-"+i]});
+    save();update();
+  });
+});
+document.querySelectorAll(".week-item[data-target]").forEach(button=>button.addEventListener("click",()=>{
+  document.getElementById(button.dataset.target).scrollIntoView({behavior:"smooth",block:"start"});
+}));
+document.getElementById("reset-all").addEventListener("click",()=>{
+  if(confirm("Clear all checked exercises for this week?")){
+    checks={};document.querySelectorAll(".done").forEach(b=>b.checked=false);save();update();
+  }
+});
+update();
+</script>
+</body>
+</html>
